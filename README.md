@@ -1,12 +1,63 @@
 # SoftRobotSimulator
+# A Data-efficient Neural ODE Framework for Optimal Control of Soft Manipulators
+This paper introduces a novel approach for modeling continuous forward kinematic models of soft continuum robots by employing Augmented Neural ODE (ANODE), a cutting-edge family of deep neural network models. To the best of our knowledge, this is the first application of ANODE in modeling soft continuum robots. This formulation introduces auxiliary dimensions, allowing the system's states to evolve in the augmented space which provides a richer set of dynamics that the model can learn, increasing the flexibility and accuracy of the model. Our methodology achieves exceptional sample efficiency, training the continuous forward kinematic model using only 25 scattered data points.
+# Installation and Setup
 
-pip install numpy
-pip install matplotlib
-pip install pybullet
-pip install pytorch-mppi
-pip install torch torchvision 
-pip install torchdiffeq
+## Clone the Repository:
+
+```
+git clone https://github.com/MohammadKasaei/SoftRobotSimulator
+cd SoftRobotSimulator
+
+```
+## Set Up a Virtual Environment (optional):
+
+```
+python -m venv env
+source env/bin/activate  # On Windows use `env\Scripts\activate`
+```
+## Install Dependencies:
+Before running the script, make sure you have execute permissions. Run the following command:
+```
+chmod +x install_dependencies.sh
+```
+To install all the dependencies, simply run:
+
+```
+./install_dependencies.sh
+```
+Wait for the script to complete. Once done, all the required dependencies should be installed in your environment.
 
 
+## Usage 
+Instructions on how to run the code, experiments, and reproduce results.
+
+```
+python -m scripts.test_pybullet_MPPI
+```
+Once everything successfully installed, you'll see the simulated robot following a helical trajectory within the PyBullet simulator.
+
+![alt](images/softRobot.gif)
+
+# Citation
+If you find our paper or this repository helpful, please cite our work:
+
+```
+@inproceedings{kasaei2023data,
+  title={A Data-efficient Neural ODE Framework for Optimal Control of Soft Manipulators},
+  author={Kasaei, Mohammadreza and Babarahmati, Keyhan Kouhkiloui and Li, Zhibin and Khadem, Mohsen},
+  booktitle={7th Annual Conference on Robot Learning},
+  year={2023}
+}
+```
+
+
+
+
+# License
+This project is licensed under the MIT License.
+
+# Acknowledgments
+This work is supported by EU H2020 project Enhancing Healthcare with Assistive Robotic Mobile Manipulation (HARMONY, 101017008) and the Medical Research Council [MR/T023252/1].
 
 
