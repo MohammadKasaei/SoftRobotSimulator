@@ -8,7 +8,6 @@ This paper introduces a novel approach for modeling continuous forward kinematic
 ```
 git clone https://github.com/MohammadKasaei/SoftRobotSimulator
 cd SoftRobotSimulator
-
 ```
 ## Set Up a Virtual Environment (optional):
 
@@ -22,7 +21,6 @@ Before running the script, make sure you have execute permissions. Run the follo
 chmod +x install_dependencies.sh
 ```
 To install all the dependencies, simply run:
-
 ```
 ./install_dependencies.sh
 ```
@@ -31,7 +29,6 @@ Wait for the script to complete. Once done, all the required dependencies should
 
 ## Usage 
 Instructions on how to run the code, experiments, and reproduce results.
-
 ```
 python -m scripts.test_pybullet_MPPI
 ```
