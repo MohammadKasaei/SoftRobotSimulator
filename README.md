@@ -1,6 +1,10 @@
 # SoftRobotSimulator
 # A Data-efficient Neural ODE Framework for Optimal Control of Soft Manipulators
 This paper introduces a novel approach for modeling continuous forward kinematic models of soft continuum robots by employing Augmented Neural ODE (ANODE), a cutting-edge family of deep neural network models. To the best of our knowledge, this is the first application of ANODE in modeling soft continuum robots. This formulation introduces auxiliary dimensions, allowing the system's states to evolve in the augmented space which provides a richer set of dynamics that the model can learn, increasing the flexibility and accuracy of the model. Our methodology achieves exceptional sample efficiency, training the continuous forward kinematic model using only 25 scattered data points.
+
+[Paper](https://openreview.net/pdf?id=PalhNjBJqv)
+
+[Video](https://youtu.be/6tYS-5tkoQg)
 # Installation and Setup
 
 ## Clone the Repository:
