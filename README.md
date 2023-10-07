@@ -36,6 +36,15 @@ Once everything successfully installed, you'll see the simulated robot following
 
 ![alt](images/softRobot.gif)
 
+
+and for the MLP forward kinematics model, you can run the following command:
+```
+python -m scripts.test_Full_FK
+
+```
+you will see our robot visualizer:
+![alt](neuralODE/savedFigs/gif_NodeRedMPPI_20231007-104312.gif)
+
 # Citation
 If you find our paper or this repository helpful, please cite our work:
 
