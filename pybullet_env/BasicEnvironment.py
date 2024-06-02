@@ -1,8 +1,10 @@
 import pybullet as p
 import pybullet_data
 import numpy as np
+import math
 
 from visualizer.visualizer import ODE
+from scipy.spatial.transform import Rotation as Rot
 
 
 class SoftRobotBasicEnvironment():
@@ -60,6 +62,22 @@ class SoftRobotBasicEnvironment():
         p.stepSimulation()
         return obj_id 
     
+    def calculate_orientation(self, point1, point2):
+        # Calculate the difference vector
+        diff = np.array(point2) - np.array(point1)
+        
+        # Calculate yaw (around z-axis)
+        yaw = math.atan2(diff[1], diff[0])
+        
+        # Calculate pitch (around y-axis)
+        pitch = math.atan2(-diff[2], math.sqrt(diff[0]**2 + diff[1]**2))
+
+        # Roll is arbitrary in this context, setting it to zero
+        roll = 0
+
+        return p.getQuaternionFromEuler([roll, pitch, yaw])
+
+
     def create_robot(self,number_of_sphere = 20,color = [0.6, .6, 0.6, 1],body_base_color = [0.3,0.3,0.3,1], body_base_leg_color = [0.8,0.8,0.8,1]):        
         
         act = np.array([0,0,0.0])
@@ -69,16 +87,13 @@ class SoftRobotBasicEnvironment():
         self._base_pos = np.array([0,0,0.1])
         texUid = p.loadTexture("pybullet_env/textures/table_tecture.png")
         self.add_a_cube_without_collision(pos = [-0.,0.,0],size=[0.5,0.5,0.01],color=[0.7,0.7,0.7,1],textureUniqueId=texUid) # table
-
         
-        self.add_a_cube_without_collision(pos = [0.,-0.1,0.1],size=[0.1,0.2,0.1],color=body_base_color) # body
-        self.add_a_cube_without_collision(pos = [0.041,-0.009,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color) #legs
+        self.add_a_cube_without_collision(pos = [ 0.,-0.1,0.1],size=[0.1,0.2,0.1],color=body_base_color) # body
+        self.add_a_cube_without_collision(pos = [ 0.041,-0.009,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color) #legs
         self.add_a_cube_without_collision(pos = [-0.041,-0.009,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color)
 
-        self.add_a_cube_without_collision(pos = [0.041,-0.189,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color)
+        self.add_a_cube_without_collision(pos = [ 0.041,-0.189,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color)
         self.add_a_cube_without_collision(pos = [-0.041,-0.189,0.05],size=[0.02,0.02,0.1],color=body_base_leg_color)
-        
-        
         
         # Define the shape and color parameters (change these as needed)
         radius = 0.01
@@ -87,18 +102,9 @@ class SoftRobotBasicEnvironment():
         shape = p.createCollisionShape(p.GEOM_SPHERE,  radius=radius)
         visualShapeId = p.createVisualShape(p.GEOM_SPHERE, radius=radius, rgbaColor=color)
         
-        shape_tip = p.createCollisionShape(p.GEOM_SPHERE,  radius=radius)
-        # visualShapeId_tip = p.createVisualShape(p.GEOM_BOX, halfExtents=[0.025,0.025,0.002], rgbaColor=[0,0,0,1])
-        visualShapeId_tip = p.createVisualShape(p.GEOM_SPHERE, radius=radius+0.005,  rgbaColor=[0,0.,0.75,1])
-        # visualShapeId_tip = p.createVisualShape(p.GEOM_BOX, halfExtents=[radius,radius,0.001], rgbaColor=[0,0,0,1])
-
+        visualShapeId_tip = p.createVisualShape(p.GEOM_BOX, halfExtents=[0.02,0.002,0.001], rgbaColor=[1,0,0,1])
+        visualShapeId_tip_ = p.createVisualShape(p.GEOM_SPHERE, radius=radius+0.005,  rgbaColor=[0.,0,0.75,1])
         
-
-        
-        # shape = p.createCollisionShape(p.GEOM_CAPSULE, radius=radius,height = 0.005)
-        # visualShapeId = p.createVisualShape(p.GEOM_CAPSULE, radius=radius, rgbaColor=color)
-        
-
         # Load the positions
         idx = np.linspace(0,sol.shape[1]-1,self._number_of_sphere,dtype=int)
         positions = [(sol[0,i], sol[2,i], sol[1,i]) for i in idx]
@@ -108,10 +114,17 @@ class SoftRobotBasicEnvironment():
                             baseVisualShapeIndex=visualShapeId,
                             basePosition=pos+self._base_pos) for pos in positions]
         
-
+        ori = self.calculate_orientation (positions[-2],positions[-1])
+        self._robot_bodies.append(p.createMultiBody(baseMass=0, baseCollisionShapeIndex=shape,
+                            baseVisualShapeIndex=visualShapeId_tip_,
+                            basePosition=positions[-1]+self._base_pos,
+                            baseOrientation= ori))
+                                
         self._robot_bodies.append(p.createMultiBody(baseMass=0, baseCollisionShapeIndex=shape,
                             baseVisualShapeIndex=visualShapeId_tip,
-                            basePosition=positions[-1]+self._base_pos))
+                            basePosition=positions[-1]+self._base_pos,baseOrientation= ori))
+        
+        
         
         self._robot_line_ids = []
         # for i, pos in enumerate(positions):
@@ -129,7 +142,6 @@ class SoftRobotBasicEnvironment():
 
     
     def move_robot(self,action = np.array([0,0,0]),vis = True):
-
         self._ode.updateAction(action)
         sol = self._ode.odeStepFull()
         if vis:
@@ -151,14 +163,16 @@ class SoftRobotBasicEnvironment():
             #     self._robot_line_ids.append(line_id)
 
             # self._dummy_sim_step(1)
-        p.resetBasePositionAndOrientation(self._robot_bodies[-1], positions[-1]+self._base_pos, (0, 0, 0, 1))
+            
+        
+        
+        ori = self.calculate_orientation (positions[-2],positions[-1])
+        p.resetBasePositionAndOrientation(self._robot_bodies[-2], positions[-1]+self._base_pos, ori)
+        p.resetBasePositionAndOrientation(self._robot_bodies[-1], positions[-1]+self._base_pos, ori)
         
         self._dummy_sim_step(100)
         
 
-
-
-    
     def wait(self,sec):
         for _ in range(1+int(sec/self._simulationStepTime)):
             p.stepSimulation()

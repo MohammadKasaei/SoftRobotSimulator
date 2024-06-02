@@ -346,7 +346,7 @@ if __name__ == "__main__":
 
     ts = 0.1
     sys.ts = ts
-    tf = 50
+    tf = 200
     gt = 0
     x0 = np.array((0, 0, 0.1))
     endtip = np.array((0, 0, 0.1))
