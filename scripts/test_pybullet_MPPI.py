@@ -340,8 +340,9 @@ if __name__ == "__main__":
     obsPos2 = None
     
     # neural ode models   
-    pr   = prediction("neuralODE/trainedModels/model_NODE.zip")  # 25 points
-
+    # pr   = prediction("neuralODE/trainedModels/model_NODE.zip")  # 25 points
+    pr   = prediction("neuralODE/trainedModels/model_NODE_REDU_20241213-092022_T_9000.zip")  # 25 points
+    
     q = np.array([0.0, -0.0, -0.0])
 
     ts = 0.1
