@@ -2,6 +2,10 @@
 # A Data-efficient Neural ODE Framework for Optimal Control of Soft Manipulators
 This paper introduces a novel approach for modeling continuous forward kinematic models of soft continuum robots by employing Augmented Neural ODE (ANODE), a cutting-edge family of deep neural network models. To the best of our knowledge, this is the first application of ANODE in modeling soft continuum robots. This formulation introduces auxiliary dimensions, allowing the system's states to evolve in the augmented space which provides a richer set of dynamics that the model can learn, increasing the flexibility and accuracy of the model. Our methodology achieves exceptional sample efficiency, training the continuous forward kinematic model using only 25 scattered data points.
 
+<p align="center">
+  <img src="images/robot.gif" alt="Robot">
+</p>
+
 [Paper](https://openreview.net/pdf?id=PalhNjBJqv)
 
 [Video](https://youtu.be/6tYS-5tkoQg)
@@ -38,7 +42,10 @@ python -m scripts.test_pybullet_MPPI
 ```
 Once everything successfully installed, you'll see the simulated robot following a helical trajectory within the PyBullet simulator.
 
-![alt](images/softRobot.gif)
+<p align="center">
+  <img src="images/softRobot.gif" alt="Robot">
+</p>
+
 
 
 and for the MLP forward kinematics model, you can run the following command:
@@ -47,8 +54,10 @@ python -m scripts.test_Full_FK
 
 ```
 you will see our robot visualizer:
-![alt](neuralODE/savedFigs/gif_NodeRedMPPI_20231007-104312.gif)
-![alt](neuralODE/savedFigs/obstacle.gif)
+<p align="center">
+  <img src="neuralODE/savedFigs/gif_NodeRedMPPI_20231007-104312.gif" alt="NodeRed MPPI" width="45%">
+  <img src="neuralODE/savedFigs/obstacle.gif" alt="Obstacle" width="45%">
+</p>
 
 
 # Citation
@@ -71,5 +80,3 @@ This project is licensed under the MIT License.
 
 # Acknowledgments
 This work is supported by EU H2020 project Enhancing Healthcare with Assistive Robotic Mobile Manipulation (HARMONY, 101017008) and the Medical Research Council [MR/T023252/1].
-
-
